@@ -1,0 +1,60 @@
+version: "3.1"
+
+rules:
+
+- rule: Mostrar menú principal al saludar
+  steps:
+    - intent: greet
+    - action: action_fetch_main_menu
+
+- rule: Seleccionar categoría después de ver el menú
+  steps:
+    - slot_was_set:
+        - dynamic_categories
+    - intent: select_category
+    - action: action_handle_option
+    - action: action_fetch_products
+
+- rule: Seleccionar producto después de ver productos
+  steps:
+    - slot_was_set:
+        - dynamic_products
+    - intent: select_product
+    - action: action_handle_product
+
+- rule: Volver atrás
+  steps:
+    - intent: go_back
+    - action: action_go_back
+
+# Iniciar reserva después de ver producto
+- rule: Iniciar reserva después de ver producto
+  condition:
+    - slot_was_set:
+        - navigation_step: "product_detail"
+  steps:
+    - intent: start_reservation
+    - action: action_reset_reservation_slots  
+    - action: reservation_form
+    - active_loop: reservation_form
+
+# Pedir confirmación después de completar formulario
+- rule: Pedir confirmación después de completar formulario
+  condition:
+    - active_loop: reservation_form
+  steps:
+    - action: reservation_form
+    - active_loop: null
+    - action: action_ask_reservation_confirmation
+
+# Confirmar reserva
+- rule: Confirmar reserva
+  steps:
+    - intent: affirm
+    - action: utter_submit_reservation
+
+# Cancelar reserva
+- rule: Cancelar reserva
+  steps:
+    - intent: deny
+    - action: utter_cancel_reservation

@@ -1,0 +1,54 @@
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.pyo
+*.pyd
+
+# 📦 Entornos virtuales
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+.venv.bak/
+
+# 🚫 Archivos temporales de sistema
+.DS_Store
+Thumbs.db
+
+# ⚡ Logs y datos de Rasa
+.rasa/
+results/
+*.db
+*.lock
+*.tar.gz
+
+# 🧠 Modelos de Rasa (que se generan automáticamente)
+models/
+*.tar.gz
+
+# 🛠️ Archivos de configuración locales
+.rasa/cache/
+rasa.db
+tracker.db
+
+# 📝 Archivos de notebooks temporales
+.ipynb_checkpoints
+
+# 🔧 VSCode settings (opcional)
+.vscode/
+
+# ⚠️ Otros
+*.log
+*.sqlite3
+
+# 🐳 Docker
+*.pid
+*.pid.lock
+docker-compose.override.yml

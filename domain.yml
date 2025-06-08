@@ -1,0 +1,158 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - select_category
+  - select_product
+  - go_back
+  - start_reservation    # 🚨 Agregado para iniciar el formulario
+
+slots:
+  dynamic_categories:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  selected_category:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  dynamic_products:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  selected_product:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  navigation_step:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: reservation_form
+            requested_slot: name
+
+  date:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: reservation_form
+            requested_slot: date
+
+  people:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: reservation_form
+            requested_slot: people
+
+  phone:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: reservation_form
+            requested_slot: phone
+
+  reservation_confirmation:
+    type: bool
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+
+forms:
+  reservation_form:
+    required_slots:
+      - name
+      - date
+      - people
+      - phone
+
+responses:
+  utter_goodbye:
+    - text: "¡Adiós! 👋 Que tengas un excelente día."
+
+  utter_ask_rephrase:
+    - text: "Disculpá, no entendí. ¿Podrías reformular tu mensaje?"
+
+  utter_ask_name:
+    - text: "¿Cuál es tu nombre completo para la reserva?"
+
+  utter_ask_date:
+    - text: "¿Qué fecha preferís para la reserva? (Formato: DD/MM/AAAA)"
+
+  utter_ask_people:
+    - text: "¿Para cuántas personas querés reservar?"
+
+  utter_ask_phone:
+    - text: "¿Podrías indicarme tu número de teléfono para poder comunicarnos, por favor?"
+
+  utter_ask_reservation_confirmation:
+    - text: |
+        🔎 *Por favor, confirmá los datos de tu reserva:*
+        👤 Nombre: {name}
+        📅 Fecha: {date}
+        👥 Personas: {people}
+        📞 Teléfono: {phone}
+
+        ¿Es correcto?
+      buttons:
+        - title: "✅ Sí"
+          payload: "/affirm"
+        - title: "❌ No"
+          payload: "/deny"
+
+  utter_submit_reservation:
+    - text: "¡Gracias {name}! 📝 Tu reserva para {people} personas el día {date} fue procesada con éxito. 🗓️ A la brevedad un asesor se pondrá en contacto contigo al {phone}. 📞"
+
+  utter_cancel_reservation:
+    - text: "No hay problema. Si querés reservar más tarde, ¡acá estaré!"
+
+  utter_ask_if_wants_reservation:
+    - text: "¿Querés reservar este producto?"
+      buttons:
+        - title: "✅ Sí"
+          payload: "/start_reservation"   # 🚀 ESTE ES EL BUENO
+        - title: "❌ No"
+          payload: "/deny"
+
+actions:
+  - action_fetch_main_menu
+  - action_handle_option
+  - action_fetch_products
+  - action_go_back
+  - action_handle_product
+  - validate_reservation_form
+  - action_ask_reservation_confirmation
+  - action_reset_reservation_slots

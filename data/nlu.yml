@@ -1,0 +1,134 @@
+version: "3.1"
+
+nlu:
+
+- intent: greet
+  examples: |
+    - hola
+    - buenas
+    - buen día
+    - hey
+    - hi
+    - holaaa
+    - buenass
+    - buenas tardes
+    - hello
+    - salu2
+
+- intent: select_category
+  examples: |
+    - 1
+    - 2
+    - 3
+    - 4
+    - opción 1
+    - opción 2
+    - opción 3
+    - opción 4
+    - elijo 1
+    - elijo 2
+    - elijo 3
+    - quiero la opción 1
+    - quiero la opción 2
+    - quiero la opción 3
+    - selecciono 1
+    - selecciono 2
+    - selecciono 3
+    - número 1
+    - número 2
+    - número 3
+    - quiero el 1
+    - quiero el 2
+    - quiero el 3
+    - selecciono número 1
+    - selecciono número 2
+    - selecciono número 3
+
+- intent: select_product
+  examples: |
+    - A
+    - B
+    - C
+    - D
+    - opción A
+    - opción B
+    - opción C
+    - opción D
+    - letra A
+    - letra B
+    - letra C
+    - letra D
+    - elijo A
+    - elijo B
+    - elijo C
+    - elijo D
+    - quiero la opción A
+    - quiero la opción B
+    - quiero la opción C
+    - selecciono A
+    - selecciono B
+    - selecciono C
+    - selecciono D
+    - quiero el producto A
+    - quiero el producto B
+    - quiero el producto C
+    - quiero la letra A
+    - quiero la letra B
+    - quiero la letra C
+    - quiero ver el producto A
+    - quiero ver el producto B
+
+- intent: go_back
+  examples: |
+    - volver
+    - atrás
+    - volver atrás
+    - retroceder
+    - volver al menú
+    - regresar
+
+# NUEVO INTENT 🔥 para iniciar la reserva
+- intent: start_reservation
+  examples: |
+    - quiero reservar
+    - quiero hacer la reserva
+    - dale, reservemos
+    - empecemos la reserva
+    - quiero iniciar la reserva
+    - reservar ya
+    - quiero reservar este
+    - sí, quiero reservar
+    - dale, quiero reservar
+    - hacer la reserva ahora
+
+- intent: affirm
+  examples: |
+    - sí
+    - claro
+    - por supuesto
+    - quiero
+    - correcto
+    - afirmativo
+    - ok
+    - dale
+    - seguro
+    - sip
+    - sipi
+    - así es
+    - confirmado
+    - exacto
+    - claro que sí
+
+- intent: deny
+  examples: |
+    - no
+    - mejor no
+    - no quiero
+    - negativo
+    - no gracias
+    - después
+    - tal vez más tarde
+    - nop
+    - nopo
+    - no, gracias
+    - dejémoslo
