@@ -12,6 +12,7 @@ intents:
   - select_product
   - go_back
   - start_reservation    # 🚨 Agregado para iniciar el formulario
+  - go_to_main_menu 
 
 slots:
   dynamic_categories:

@@ -132,3 +132,21 @@ nlu:
     - nopo
     - no, gracias
     - dejémoslo
+
+- intent: go_to_main_menu
+  examples: |
+    - inicio
+    - volver al inicio
+    - volver al comienzo
+    - quiero volver al comienzo
+    - menú
+    - menu principal
+    - ir al menú
+    - salir
+    - quiero salir
+    - volver al menú
+    - volver al menú principal
+    - inicio de nuevo
+    - comenzar de nuevo
+    - volver al principio
+    - comenzar otra vez

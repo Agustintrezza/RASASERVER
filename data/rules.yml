@@ -59,3 +59,9 @@ rules:
     - intent: deny
     - action: utter_cancel_reservation
     - action: action_go_back   # 🚀 Redirigimos al menú
+
+
+- rule: Ir al menú desde cualquier lugar
+  steps:
+    - intent: go_to_main_menu
+    - action: action_go_back
