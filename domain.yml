@@ -44,6 +44,20 @@ slots:
     mappings:
       - type: custom
 
+  # 🔥 Slot para menú combinado categorías + secciones
+  menu_items:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  # 🔥 Slot para guardar qué sección eligió el usuario
+  selected_section:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
   name:
     type: text
     influence_conversation: false
@@ -143,7 +157,7 @@ responses:
     - text: "¿Querés reservar este producto?"
       buttons:
         - title: "✅ Sí"
-          payload: "/start_reservation"   # 🚀 ESTE ES EL BUENO
+          payload: "/start_reservation"
         - title: "❌ No"
           payload: "/deny"
 
@@ -156,3 +170,4 @@ actions:
   - validate_reservation_form
   - action_ask_reservation_confirmation
   - action_reset_reservation_slots
+  - action_fetch_section_details   # 🚨 Nueva action para mostrar detalle de la sección

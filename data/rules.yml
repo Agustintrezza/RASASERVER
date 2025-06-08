@@ -58,3 +58,4 @@ rules:
   steps:
     - intent: deny
     - action: utter_cancel_reservation
+    - action: action_go_back   # 🚀 Redirigimos al menú

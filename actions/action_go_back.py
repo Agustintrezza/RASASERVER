@@ -2,7 +2,11 @@ from typing import Any, Dict, List, Text
 from rasa_sdk import Tracker, Action
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet, EventType
+import requests
+import urllib.parse
+import string
 
+# ----- VOLVER ATRÁS -----
 class ActionGoBack(Action):
     def name(self) -> Text:
         return "action_go_back"
@@ -17,11 +21,6 @@ class ActionGoBack(Action):
             dispatcher.utter_message(text="📚 Volviendo al listado de productos...")
 
             selected_category = tracker.get_slot("selected_category")
-
-            # 👉 Manualmente devolvemos la lista sin FollowupAction
-            import requests
-            import urllib.parse
-            import string
 
             if selected_category:
                 try:
@@ -50,72 +49,58 @@ class ActionGoBack(Action):
 
                 return [
                     SlotSet("dynamic_products", products),
-                    SlotSet("navigation_step", "category")
+                    SlotSet("navigation_step", "category"),
+                    SlotSet("selected_product", None),  # 🔥 Limpio producto
+                    SlotSet("selected_section", None)   # 🔥 Limpio sección por las dudas
                 ]
             else:
                 dispatcher.utter_message(text="⚠️ Error: no hay categoría seleccionada.")
                 return []
 
-        elif navigation_step == "category":
+        else:
             dispatcher.utter_message(text="📋 Volviendo al menú principal...")
 
-            # Lo mismo para el menú:
-            import requests
-
             try:
-                response = requests.get("http://localhost:5000/api/categories")
-                response.raise_for_status()
-                categories = response.json()
+                categories_response = requests.get("http://localhost:5000/api/categories")
+                sections_response = requests.get("http://localhost:5000/api/sections")
+                categories_response.raise_for_status()
+                sections_response.raise_for_status()
+                categories = categories_response.json()
+                sections = sections_response.json()
             except Exception as e:
-                dispatcher.utter_message(text="⚠️ No pude cargar el menú. Intentá más tarde.")
+                print(f"🌐 Error al volver al menú: {e}")
+                dispatcher.utter_message(text="⚠️ No pude volver al menú. Intentá más tarde.")
                 return []
 
-            if not categories:
-                dispatcher.utter_message(text="⚠️ No hay categorías disponibles por el momento.")
+            if not categories and not sections:
+                dispatcher.utter_message(text="⚠️ No hay opciones disponibles por el momento.")
                 return []
 
+            # Armamos menú combinado
             message = "👌 ¡Bienvenido a *Ethereal Tours*! 🇦🇷✨\n"
             message += "📋 **Seleccioná una opción escribiendo su número:**\n\n"
-            for idx, cat in enumerate(categories, 1):
-                name = cat.get('name', 'Sin nombre')
-                message += f"{idx}. {name}\n"
+
+            combined_menu = []
+            for cat in categories:
+                combined_menu.append({"type": "category", "name": cat.get('name', 'Sin nombre')})
+            for sec in sections:
+                combined_menu.append({"type": "section", "title": sec.get('title', 'Sin título')})
+
+            for idx, item in enumerate(combined_menu, 1):
+                if item['type'] == 'category':
+                    message += f"{idx}. {item['name']}\n"
+                else:
+                    message += f"{idx}. {item['title']} (Sección)\n"
+
             message += "\n📞 También podés escribir \"hablar con un asesor\" para asistencia personalizada."
 
             dispatcher.utter_message(text=message)
 
             return [
-                SlotSet("dynamic_categories", categories),
-                SlotSet("navigation_step", "menu")
-            ]
-
-        else:
-            dispatcher.utter_message(text="📋 Volviendo al menú principal... (default)")
-
-            # Igual que arriba
-            import requests
-
-            try:
-                response = requests.get("http://localhost:5000/api/categories")
-                response.raise_for_status()
-                categories = response.json()
-            except Exception as e:
-                dispatcher.utter_message(text="⚠️ No pude cargar el menú. Intentá más tarde.")
-                return []
-
-            if not categories:
-                dispatcher.utter_message(text="⚠️ No hay categorías disponibles por el momento.")
-                return []
-
-            message = "👌 ¡Bienvenido a *Ethereal Tours*! 🇦🇷✨\n"
-            message += "📋 **Seleccioná una opción escribiendo su número:**\n\n"
-            for idx, cat in enumerate(categories, 1):
-                name = cat.get('name', 'Sin nombre')
-                message += f"{idx}. {name}\n"
-            message += "\n📞 También podés escribir \"hablar con un asesor\" para asistencia personalizada."
-
-            dispatcher.utter_message(text=message)
-
-            return [
-                SlotSet("dynamic_categories", categories),
-                SlotSet("navigation_step", "menu")
+                SlotSet("menu_items", combined_menu),
+                SlotSet("navigation_step", "menu"),
+                SlotSet("selected_category", None),
+                SlotSet("dynamic_products", None),
+                SlotSet("selected_product", None),
+                SlotSet("selected_section", None)  # 🔥 Limpiar sección al volver
             ]
