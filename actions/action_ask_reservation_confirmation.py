@@ -15,9 +15,17 @@ class ActionAskReservationConfirmation(Action):
         date = tracker.get_slot("date")
         people = tracker.get_slot("people")
         phone = tracker.get_slot("phone")
+        selected_product = tracker.get_slot("selected_product")
+
+        # ✅ Usar 'title' en vez de 'name'
+        if isinstance(selected_product, dict):
+            product_name = selected_product.get("title", "Producto desconocido")
+        else:
+            product_name = selected_product or "Producto desconocido"
 
         message = (
             f"🔎 *Por favor, confirmá los datos de tu reserva:*\n"
+            f"🏷️ Producto: {product_name}\n"
             f"👤 Nombre: {name}\n"
             f"📅 Fecha: {date}\n"
             f"👥 Personas: {people}\n"

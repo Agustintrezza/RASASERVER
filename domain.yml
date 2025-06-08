@@ -11,8 +11,8 @@ intents:
   - select_category
   - select_product
   - go_back
-  - start_reservation    # 🚨 Agregado para iniciar el formulario
-  - go_to_main_menu 
+  - start_reservation
+  - go_to_main_menu
 
 slots:
   dynamic_categories:
@@ -45,14 +45,12 @@ slots:
     mappings:
       - type: custom
 
-  # 🔥 Slot para menú combinado categorías + secciones
   menu_items:
     type: any
     influence_conversation: false
     mappings:
       - type: custom
 
-  # 🔥 Slot para guardar qué sección eligió el usuario
   selected_section:
     type: text
     influence_conversation: false
@@ -95,6 +93,12 @@ slots:
           - active_loop: reservation_form
             requested_slot: phone
 
+  product_title:          # 🔥 NUEVO SLOT
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
   reservation_confirmation:
     type: bool
     influence_conversation: false
@@ -136,6 +140,7 @@ responses:
   utter_ask_reservation_confirmation:
     - text: |
         🔎 *Por favor, confirmá los datos de tu reserva:*
+        🏷️ Producto: {product_title}
         👤 Nombre: {name}
         📅 Fecha: {date}
         👥 Personas: {people}
@@ -148,8 +153,8 @@ responses:
         - title: "❌ No"
           payload: "/deny"
 
-  utter_submit_reservation:
-    - text: "¡Gracias {name}! 📝 Tu reserva para {people} personas el día {date} fue procesada con éxito. 🗓️ A la brevedad un asesor se pondrá en contacto contigo al {phone}. 📞"
+  utter_submit_reservation:   # 🔥 CORREGIDO
+    - text: "¡Gracias {name}! 📝 Tu reserva para *{product_title}* para {people} personas el día {date} fue procesada con éxito. 🗓️ A la brevedad un asesor se pondrá en contacto contigo al {phone}. 📞"
 
   utter_cancel_reservation:
     - text: "No hay problema. Si querés reservar más tarde, ¡acá estaré!"
@@ -171,4 +176,5 @@ actions:
   - validate_reservation_form
   - action_ask_reservation_confirmation
   - action_reset_reservation_slots
-  - action_fetch_section_details   # 🚨 Nueva action para mostrar detalle de la sección
+  - action_fetch_section_details
+  - action_deactivate_loop

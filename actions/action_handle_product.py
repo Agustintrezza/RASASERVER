@@ -32,7 +32,7 @@ class ActionHandleProduct(Action):
 
         selected_product = dynamic_products[selected_index]
 
-        # Mostrar el detalle del producto
+        # Extraer los detalles del producto
         title = selected_product.get('title', 'Sin título')
         description = selected_product.get('description', 'Sin descripción')
         price = selected_product.get('price', 'Precio no disponible')
@@ -55,5 +55,6 @@ class ActionHandleProduct(Action):
 
         return [
             SlotSet("selected_product", selected_product),
+            SlotSet("product_title", title),  # 🔥 Nuevo SlotSet para guardar el título
             SlotSet("navigation_step", "product_detail")
         ]

@@ -27,7 +27,6 @@ rules:
     - intent: go_back
     - action: action_go_back
 
-# Iniciar reserva después de ver producto
 - rule: Iniciar reserva después de ver producto
   condition:
     - slot_was_set:
@@ -38,7 +37,6 @@ rules:
     - action: reservation_form
     - active_loop: reservation_form
 
-# Pedir confirmación después de completar formulario
 - rule: Pedir confirmación después de completar formulario
   condition:
     - active_loop: reservation_form
@@ -47,19 +45,16 @@ rules:
     - active_loop: null
     - action: action_ask_reservation_confirmation
 
-# Confirmar reserva
 - rule: Confirmar reserva
   steps:
     - intent: affirm
     - action: utter_submit_reservation
 
-# Cancelar reserva
 - rule: Cancelar reserva
   steps:
     - intent: deny
     - action: utter_cancel_reservation
-    - action: action_go_back   # 🚀 Redirigimos al menú
-
+    - action: action_go_back
 
 - rule: Ir al menú desde cualquier lugar
   steps:

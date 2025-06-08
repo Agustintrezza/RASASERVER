@@ -72,9 +72,6 @@ nlu:
     - quiero el producto A
     - quiero el producto B
     - quiero el producto C
-    - quiero la letra A
-    - quiero la letra B
-    - quiero la letra C
     - quiero ver el producto A
     - quiero ver el producto B
 
@@ -87,7 +84,6 @@ nlu:
     - volver al menú
     - regresar
 
-# NUEVO INTENT 🔥 para iniciar la reserva
 - intent: start_reservation
   examples: |
     - quiero reservar
